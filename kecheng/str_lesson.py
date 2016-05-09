@@ -20,7 +20,13 @@
         rstrip()：删除字符串右侧的指定字符，默认为空格
         lstrip()：删除字符串左侧的指定字符，默认为空格
         swapcase()：将字符串大写变为小写，小写变为大写
-        
+        endswith():以子串结束的字符串
+        startswith():以子串开头的字符串
+        isalnum():判断是否为数字和字母
+        isdigit():判断是否为数字
+        isalpha():判断是否为字母
+        ...
+        splitlines():按换行符分割字符串
 '''
 chars = 'skdfjas;dfjsl;dfkjs;d'
 print chars[0], chars[-1]
@@ -83,7 +89,8 @@ for i in chars:
 print s
 
 #分割用户
-s = raw_input("Enter usernmae1:id1, username2:id2:")
+#s = raw_input("Enter usernmae1:id1, username2:id2:")
+s = 'ryan1:10,ryan2:20,ryan3:30'
 s = s.strip()
 rt_list = []
 rt_names = s.split(',')
@@ -93,7 +100,37 @@ for i in rt_names:
     rt_list.append((name, int(uid)))
 print rt_list
 
+#取字符串中字母出现次数的top10
+#1.采用冒泡排序，生成有序列表
+#2.采最后10个元素
+read_me = '''
+first of all, i want make it clear that i can not claim understanding this holy book  in just a few weeks, and i would not dare comment on this sacred book, in addition, i don't think i can give you a full picture of the holy bible in just few words.i can not preach anything here. what i want to do here is to express my understanding by sharing two events described in this book. the fist story i want to share is abandoned tower of babel.according to the bibel,people use the same language to communicate with each other in ancient times.with the soaring vanity,they decided to build a heaven-reaching tower to show off their achievement, god knows, he change the human language into different kinds and make it difficult for people to communicate with each other,hence the failure of building tower of  babel.this story tells people,never do things in selfishness, but make a life out of enternal glory.the other story,before jesus christ was crucified,he said, father,forgive them, for they know not what they do. with great love, he shouldered all the sins of  people. what can we learn from this story?we live in this world thanks to the love of god, for this reanson, we should make our lives glorious to honor our god.finally,i want to sum up by saying that only if we put our lives in the eternal love of god,can we live a perfect life, and  what you appealed is what god expected!
+'''
+dic_count1 = {}
+for x in read_me:
+    dic_count1[x] = dic_count1.get(x, 0) +  1
+print dic_count1
 
-     
 
+dict_list = dic_count1.items()
+#方法1：全部排序
+for i in range(len(dict_list)-1):
+    for j in range(len(dict_list) - 1 - i):
+        if dict_list[j][1] > dict_list[j + 1][1]:
+            dict_list[j],dict_list[j + 1] = dict_list[j + 1],dict_list[j]
+print dict_list
+print dict_list[-1:-11:-1]
 
+#方法2：只冒泡前10个   
+for i in range(11):
+    for j in range(11 - 1 - i):
+        if dict_list[j][1] > dict_list[j + 1][1]:
+            dict_list[j],dict_list[j + 1] = dict_list[j + 1],dict_list[j]
+print dict_list
+print dict_list[-1:-11:-1]
+
+#字符串格式化format
+#左对齐
+print 'my name is {name: <5}, my age is {age:<5}'.format(name = 'kk', age = '20')
+#右对齐
+print 'my name is {name: >5}, my age is {age:>5}'.format(name = 'kk', age = '20')
