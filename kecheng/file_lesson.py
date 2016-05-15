@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#_*_coding:utf-8_*_
+# -*- coding:utf-8 -*-
 
 '''
 1.文件路径：
@@ -7,22 +7,32 @@
     绝对路径：/ c:/
     相对路径：当前进程启动目录
 2.文件操作：
-读、写
+读、写(r, w, rb, r+)
     找到文件，==》文件路径
     打开文件 ==》open(path,mode)
         mode:
             r：读
             w：写
             a：追加
+            rb:以二进制方式打开文件
+            r+:以读写方式打开文件，不清空文件；写文件时候，从每一个字符覆盖去写
     查看、修改，删除,保存
         读：
         read(),readlines(),readline()
     关闭文件
         close()
-写：
-    write:只能写字符串
+写(w,wb, w+)：
+    write:只能写字符串，打开文件会直接清空文件
     writeline:列表里元素必须为字符串
+    flush:将内存中数据写进磁盘等同于window的ctrl+s
+    w+:以读写方式打开文件，打开文件会清空文件
+追加(a,ab)：
+    以追加方式写入文件，将内容追加到文件末尾，不会清除原文件内容
+    a+:
 
+file.seek():文件指针位置
+file.tell():查看文件指针当前位置
+file.seek(-3, 2):2表示文件末尾，-3表示从文件末尾向前数,然后向后写入，按顺序替换字符串
 '''
 
 path = '/Users/yhzhao/Documents/reboot/a.txt'

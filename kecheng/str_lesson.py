@@ -122,12 +122,12 @@ print dict_list
 print dict_list[-1:-11:-1]
 
 #方法2：只冒泡前10个   
-for i in range(11):
-    for j in range(11 - 1 - i):
-        if dict_list[j][1] > dict_list[j + 1][1]:
-            dict_list[j],dict_list[j + 1] = dict_list[j + 1],dict_list[j]
-print dict_list
-print dict_list[-1:-11:-1]
+# for i in range(11):
+#     for j in range(len(dict_list) - 1 - i):
+#         if dict_list[j][1] > dict_list[j + 1][1]:
+#             dict_list[j],dict_list[j + 1] = dict_list[j + 1],dict_list[j]
+# print dict_list
+# print dict_list[-1:-11:-1]
 
 #字符串格式化format
 #左对齐
