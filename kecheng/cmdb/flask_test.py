@@ -3,7 +3,7 @@
 from flask import Flask, render_template
 from logs_count import log_count
 from flask import request, redirect
-import user_action
+import user_action, user_action
 
 app = Flask(__name__)
 
