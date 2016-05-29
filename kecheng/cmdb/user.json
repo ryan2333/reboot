@@ -1,4 +1,1 @@
-[
-	{"age": 28, "username": "user1", "password": "123456", "sex": "male"},
-	{"age": 28, "username": "user2", "password": "123456", "sex": "male"}
-]
+[{"username": "user3", "phone": "1234567890", "age": "21", "password": "123456", "email": "user3@mail.com"}, {"username": "user1", "phone": "18600429295", "age": "24", "password": "123456", "email": "user1@mail.com"}, {"username": "user4", "phone": "11123443223", "age": "21", "password": "123456", "email": "user4@mail.com"}]
