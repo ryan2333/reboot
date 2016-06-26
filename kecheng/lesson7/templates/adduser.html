@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>添加用户</title>
+	</head>
+	<body>
+		<div><h3 style="color: green">添加用户</h3></div>
+		<div>
+			{% for msg in get_flashed_messages() %}
+				<div><h3 style="color: red">{{ msg }}</h3></div>
+   			{% endfor%}
+			<form action="/wuser/" method="post" enctype="multipart/form-data">
+				<table>
+					<tr><td>用户名：</td><td><input type="text" name="username"></td></tr>
+					<tr><td>密码：</td><td><input type="password" name="password"></td></tr>
+					<tr><td>年龄：</td><td><input type="text" name="age"></td></tr>
+					<tr><td>性别：</td><td>男<input type="radio" name='gender' value="1">女<input type="radio" name='gender' value="0" checked="checked"></td></tr>
+					<tr><td>爱好：</td><td><input type="checkbox" name='hobby' value="football">足球
+										  <input type="checkbox" name='hobby' value="basketball" checked="checked">篮球
+										  <input type="checkbox" name='hobby' value="movie" checked="checked">电影
+										  <input type="checkbox" name='hobby' value="art" >艺术
+									</td></tr>
+					<tr><td>部门：</td><td>
+										  <select name="dept">
+										  	<option value="dev_01"研发一部</option>
+										  	<option value="dev_02">研发二部</option>
+										  	<option value="qa_01">测试一部</option>
+										  	<option value="qa_02">测试二部</option>
+										  	<option value="hr_01"  selected="selected">人事部</option>
+										  	<option value="mis_01">运维部</option>
+										  </select>
+						
+					</td></tr>
+					<tr><td>电话：</td><td><input type="text" name="phone"></td></tr>
+					<tr><td>邮箱：</td><td><input type="text" name="email"></td></tr>
+					<tr><td>描述：</td><td><textarea name="desc"></textarea></td></tr>
+					<tr><td>文件上传：</td><td><input type="file" name="upfile"></td></tr>
+				</table>
+				<div><input type="submit" value="提交"></div>
+			</form>
+		</div>
+	</body>
+</html>

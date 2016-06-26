@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>{{title}}</title>
+        <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    </head>
+    <body>
+   		{% for msg in get_flashed_messages() %}
+			<div><h3 style="color: red">{{ msg }}</h3></div>
+   		{% endfor%}
+	    <div class="container">
+	    	<div class="row">
+		        <a href="/users/?number=10">usertop10</a>
+		        <a href="/users/?number=20">usertop20</a>
+		        <a href="/users/?number=50">usertop50</a>
+		        <a href="/users/?number=100">usertop100</a>
+		        <a href="/logs/?number=10">accesslogs_detial</a>
+		        <font style="color:red">欢迎&nbsp;{{session.get('user', {}).get('username', '')}}</font>&nbsp;&nbsp; <a href="/logout/">logout</a>
+	        </div>
+	    	<div class="row">
+		        <table class="table table-bordered table-striped table-hover">
+		                <tr>
+		                	<th width="100px" align="center">用户ID</th>
+		                    <th width="100px" align="center">用户名</th>
+		                    <th width="100px" align="center">密码</th>
+		                    <th width="100px" align="center">年龄</th>
+		                    <th width="100px" align="center">联系电话</th>
+		                    <th width="100px" align="center">邮箱</th>
+		                    <th width="100px" align="center">操作</th>
+		                </tr>
+		            <tbody>
+		                {% for node in content %}
+		                <tr>
+		                	<td width="100px" align="center">{{ node['uid']}}</td>
+		                    <td width="100px" align="center">{{ node['username']}}</td>
+		                    <td width="100px" align="center">{{ node['password']}}</td>
+		                    <td width="100px" align="center">{{ node['age']}}</td>
+		                    <td width="100px" align="center">{{ node['phone']}}</td>
+		                    <td width="100px" align="center">{{ node['email']}}</td>
+		                    <td><a href="/modifyuser/?uid={{ node['uid']}}">修改</a>&nbsp;&nbsp;<a href="/deluser/?uid={{ node['uid']}}">删除</a></td>
+		                </tr>
+		                {% endfor %}
+		            </tbody>
+	        	</table>
+        	</div>
+        </div>
+        	<p></p>
+        	<a href="/adduser/">添加用户</a>
+        <div>
+        </div>
+    </body>
+</html>
