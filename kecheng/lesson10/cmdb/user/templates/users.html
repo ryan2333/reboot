@@ -1,0 +1,66 @@
+
+{% extends "layout.html" %}
+{% block title %}用户管理{% endblock %}
+{% block nav_user %}active{% endblock %}
+{% block main %}
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>用户名</th>
+            <th>密码</th>
+            <th>年龄</th>
+            <th>电话</th>
+            <th>邮箱</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{user['username']}}</td>
+            <td>{{user['password']}}</td>
+            <td>{{user['age']}}</td>
+            <td>{{user['phone']}}</td>
+            <td>{{user['email']}}</td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#dialog" data-title="用户信息修改" data-btn="更新" data-url="/user/modify/?id={{user['id']}}">编辑</button>
+                <button type="button" class="btn btn-xs btn-danger btn-delete" data-toggle="modal"  data-url="/user/delete/?userid={{user['id']}}" data-text="{{user['username']}}">删除</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#dialog" data-title="修改密码" data-btn="更新"  data-url="/user/changepass/?userid={{user['id']}}">修改密码</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#dialog" data-title="创建用户" data-btn="创建" data-url="/user/create/">添加用户</button>
+{% endblock %}
+    <script type="text/javascript" src="/static/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+{% block js %}
+<script type="text/javascript">
+jQuery(document).ready(function () {
+
+//        jQuery('.btn-delete').on('click',function () {
+//           var that = this,
+//                   text = jQuery(that).data('text'),
+//                   url = jQuery(that).data('url');
+//            swal({
+//               title: "确定删除用户" + text,
+//                  text: "",
+//                  type: "warning",
+//                  showCancelButton: true,
+//                  confirmButtonColor: "#DD6B55",
+//                  confirmButtonText: "确定",
+//                  cancelButtonText: "关闭",
+//                  closeOnConfirm: true,
+//                  closeOnCancel: true
+//            },
+//            function(isConfirm) {
+//                if (isConfirm){
+//                    window.location.replace(url);
+//                }
+//            })
+//        })
+    })
+
+</script>
+{% endblock %}
