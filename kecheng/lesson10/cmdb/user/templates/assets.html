@@ -21,6 +21,7 @@
             <th>CPU/内存/硬盘</th>
             <th>机房</th>
             <th>使用者(业务)</th>
+            <th>应用</th>
             <th>采购时间(保修时长)</th>
             <th>型号(供应商)</th>
             <th>操作</th>
@@ -33,19 +34,18 @@
             <td>{{asset['ip']}}({{asset['hostname']}})</td>
             <td>{{asset['os']}}</td>
             <td>
-                <ul>
-                    <li>cpu:{{asset['cpu']}}核</li>
-                    <li>内存:{{asset['mem']}}G</li>
-                    <li>硬盘:{{asset['disk']}}G</li>
-                </ul>
+                {{asset['cpu']}}核/{{asset['mem']}}G/{{asset['disk']}}G
             </td>
             <td>{{idcs.get(asset['idc_id'])}}</td>
             <td>{{asset['admin']}}({{asset['business']}})</td>
+            <td>{{asset['application']}}</td>
             <td>{{asset['purchase_date']}}({{asset['warranty']}})</td>
             <td>{{asset['model']}}({{asset['vendor']}})</td>
             <td>
+                <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#dialog" data-title="查看监控" data-btn="关闭" data-url="/assets/performs/?sn={{asset['sn']}}">监控</button>
                 <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#dialog" data-title="修改资产" data-btn="修改" data-url="/assets/modify/?sn={{asset['sn']}}">修改</button>
                 <button type="button" class="btn btn-xs btn-danger btn-delete" data-toggle="modal"  data-url="/assets/delete/?sn={{asset['sn']}}" data-text="{{asset['sn']}}">删除</button>
+                <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#dialog" data-title="执行命令" data-btn="执行" data-url="/execute/?ip={{asset['ip']}}">执行命令</button>
             </td>
         </tr>
         {% endfor %}
@@ -64,6 +64,7 @@
 <script type="text/javascript" src="/static/DataTables-1.10.12/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="/static/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="/static/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="/static/Highcharts-4.2.5/js/highcharts.js"></script>
 {% endblock %}
 {% block js %}
 <script type="text/javascript">

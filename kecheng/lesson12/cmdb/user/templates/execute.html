@@ -1,0 +1,23 @@
+<form action="/assets/execute/" method="post">
+  <div class="form-group">
+    <label for="mgr-passwd" class="control-label">管理员密码:</label>
+    <input type="password" class="form-control" id="mgr-passwd" name="mgr-passwd">
+  </div>
+  <div class="form-group">
+    <label for="rhost" class="control-label">主机IP:</label>
+    <input type="text" class="form-control" id="rhost" name="hostip">
+  </div>
+  <div class="form-group">
+    <label for="rport" class="control-label">主机端口:</label>
+    <input type="text" class="form-control" id="rport" name="rport">
+  </div>
+  <div class="form-group">
+    <label for="ruser" class="control-label">主机登陆名:</label>
+    <input type="text" class="form-control" id="ruser" name="ruser">
+  </div>
+  <div class="form-group">
+    <label for="rcmd" class="control-label">命令:</label>
+    <textarea class="form-control" id="rcmd" name="cmds" rows="5" placeholder="多条命令以换行分隔"></textarea>
+  </div>
+
+</form>

@@ -68,7 +68,18 @@ class Dog(Animal):
 
         print self.variety ,self.name ,' running'
 
-dd = dog('hh', 1, 'hsq')
+dd = Dog('hh', 1, 'hsq')
 
 dd.run()
 print dd.age
+
+
+class Test(object):
+  def __init__(self,name,age):
+    self.name = name
+    self.age = age
+  def aa(self):
+    print self.name, self.age
+
+df = Test('ww',11)
+df.aa()

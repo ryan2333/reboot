@@ -1,0 +1,48 @@
+
+<body>
+<div id="container" style="min-width:600px;height:200px"></div>
+</body>
+<script type="text/javascript">
+	$(function () {
+    $('#container').highcharts({
+        title: {
+            text: 'Monthly Average CPU & MEM',
+            x: -20 //center
+        },
+        subtitle: {
+            text: 'Source: Data collect',
+            x: -20
+        },
+        xAxis: {
+            categories: {{datetime_list|safe}}
+        },
+        yAxis: {
+            title: {
+                text: 'CPU & MEM(%)'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: '%'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'CPU',
+            data: {{ cpu_list|safe}}
+        }, {
+            name: 'MEM',
+            data: {{ mem_list|safe}}
+        }]
+    });
+});
+				
+</script>

@@ -24,6 +24,7 @@ import loganalysisdb as loganalysis
 import log2db
 
 
+
 def login_required(func):
 
     @wraps(func)
@@ -106,7 +107,7 @@ def add_user():
     if _is_ok:
 
         models.User.add(username, password, age, phone, email)      #检查ok，添加用户信息
-        return json.dumps({'is_ok': _is_ok, 'error':_error})                 #跳转到用户列表url_for
+        return json.dumps({'is_ok': _is_ok, 'success': '用户创建成功','error':_error})                 #跳转到用户列表url_for
     else:
         #跳转到用户新建页面，回显错误信息&用户信息
         return json.dumps({'is_ok': _is_ok, 'error':_error})
@@ -150,12 +151,11 @@ def update_user():
     age = request.form.get('age', '')
     phone = request.form.get('phone', '')
     email = request.form.get('email', '')
-    print uid,username
     #检查用户信息
     _is_ok, _error = models.User.validate_update_user(uid,username,password, age, phone, email)
     if _is_ok:
         models.User.update_user(uid, password, age, phone, email)
-        return json.dumps({'is_ok': _is_ok, 'error':_error})
+        return json.dumps({'is_ok': _is_ok, 'success':'用户信息修改成功','error':_error})
     else:
         return json.dumps({'is_ok': _is_ok, 'error':_error})
 
@@ -233,6 +233,7 @@ def test():
 def assets_list():
     # 获取所有资产的信息
     _assets = assets.get_list()
+    print _assets
     idcs = dict([(1, '北京-亦庄'), (2, '北京-酒仙桥'), (3, '北京-西单'), (4, '北京-东单')])
     return render_template('assets.html', assets=_assets, idcs = idcs)
 
@@ -260,12 +261,14 @@ def assets_create():
     cpu = pa('cpu')
     mem = pa('mem')
     disk = pa('disk')
+    application = pa('application')
 
 
-    _is_ok, _error = assets.validate_create(sn, ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem, disk)
+    _is_ok, _error = models.Assets.validate_assets_add(sn, ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, application, business, cpu, mem, disk)
     if _is_ok:
-        assets.create(sn, ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem, disk)
-        return json.dumps({'is_ok':'创建成功'})
+        #assets.create(sn, ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem, disk)
+        models.Assets.Assets_create(sn, ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, application,business, cpu, mem, disk)
+        return json.dumps({'is_ok':'创建成功','success':'资产添加成功'})
     else:
         return json.dumps({'error': "\n".join(_error['error'])})
 
@@ -277,9 +280,9 @@ def assets_create():
 @login_required
 def assets_modify():
     _sn = request.args.get('sn')
-    print _sn
     _cnt, _assets = assets.get_by_id('sn',_sn)
     idcs = [('1', '北京-亦庄'), ('2', '北京-酒仙桥'), ('3', '北京-西单'), ('4', '北京-东单')]
+    print _assets
     return render_template('assets_modify.html', assets=_assets, idcs=idcs)
 
 @app.route('/assets/update/', methods=['POST','GET'])
@@ -297,15 +300,16 @@ def assets_update():
     idc_id = pa('idc')
     admin = pa('admin')
     business = pa('business')
+    application = pa('application')
     cpu = pa('cpu')
     mem = pa('mem')
     disk = pa('disk')
-    _is_ok, _error = assets.validate_update(ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem,
+    _is_ok, _error = assets.validate_update(ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, application,business, cpu, mem,
                       disk)
     if _is_ok:
-        assets.update(ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, business, cpu, mem,
+        assets.update(ip, hostname, os, purchase_date, warranty, vendor, model, idc_id, admin, application,business, cpu, mem,
                       disk, sn)
-        return json.dumps({'is_ok': '修改成功'})
+        return json.dumps({'is_ok': '修改成功','success':'资产修改成功'})
     else:
         return json.dumps({'error': "\n".join(_error['error'])})
 
@@ -314,9 +318,88 @@ def assets_update():
 @login_required
 def assets_delete():
     aid = request.args.get('sn','')
-    print aid
     _is_ok, _rt_list = assets.delete(aid)
     if _is_ok:
         return redirect('/assets/')
     else:
         return json.dumps({'error': '删除失败'})
+
+
+
+@app.route('/performs/', methods=['POST'])
+@login_required
+def performs():
+    #接收数据测试：-d参数后，括号外边用单引号，里面用双引号
+    #curl -POST "localhost:9005/performs/" -H "Content-Type:application/json" -d '{"abc":1, "bbb":2}'
+    print request.get_json()
+    models.Performs.add(request.get_json())
+    return json.dumps({'code':200, 'text':'success'})
+
+
+@app.route('/assets/performs/')
+@login_required
+def perform_asset():
+    _sn = request.args.get('sn', '')
+    _assets = models.Assets.get_by_id('sn', _sn)[1]
+    datetime_list, cpu_list, mem_list = models.Performs.get_list(_assets['ip'])
+    return render_template('asset_perform.html', datetime_list=json.dumps(datetime_list), cpu_list=json.dumps(cpu_list), mem_list=json.dumps(mem_list))
+
+
+@app.route('/execute/')
+@login_required
+def execute():
+    _ip = request.args.get('ip', '')
+    print _ip
+    return render_template('execute.html')
+
+
+@app.route('/assets/execute/', methods=['POST'])
+@login_required
+def execute_assets():
+    pa = request.form.get
+    ip = pa('hostip', '')
+    port = pa('rport', '')
+    ruser = pa('ruser', '')
+    mgr_passwd = pa('mgr-passwd', '')
+    cmd = pa('cmds',[])
+    cmds = [x.strip() for x in cmd.split('\n')]
+
+    _is_ok, error = models.Performs.validate_execute(session['user']['username'], mgr_passwd, ip, port, ruser)
+    print _is_ok, error
+
+    if _is_ok:
+        rt = models.Performs.exectue_cmds(ip, ruser, cmds, port=22)
+        return render_template('result_execute.html', result={'ip': ip, 'rt': rt})
+    else:
+        return 'False'
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

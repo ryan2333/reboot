@@ -83,45 +83,58 @@
                   function(data){
                     console.log(data)
                     if (data['is_ok']){
-                      if (data['sucess']){
+                      if (data['success']){
                         //alert(data['sucess']);
-                        swal("Good job!", "You clicked the button!", "success")
+                        //swal(data['success'], "", "success")
+                        var text = data['success']
+                        swal({
+                          title: text,
+                          text: "",
+                          type: "success",
+                          showCancelButton: false,
+                          confirmButtonColor: "#DD6B55",
+                          confirmButtonText: "确定",
+                          cancelButtonText: "",
+                          closeOnConfirm: true,
+                          closeOnCancel: false
+                        },
+                        function(isConfirm){
+                          if (isConfirm) {
+                            jQuery('#dialog').modal('hide');
+                            window.location.reload();
+                            
+                          } 
+                        });
                       }
-                      jQuery('#dialog').modal('hide');
-                     // window.location.reload();
+                      // jQuery('#dialog').modal('hide');
+                      // window.location.reload();
                     }else{
-                      alert(data['error']);
+                      //alert(data['error']);
+                      var text = data['error']
+                      swal({
+                          title: text,
+                          text: "",
+                          type: "error",
+                          showCancelButton: false,
+                          confirmButtonColor: "#DD6B55",
+                          confirmButtonText: "确定",
+                          cancelButtonText: "",
+                          closeOnConfirm: true,
+                          closeOnCancel: false
+                        },
+                        function(isConfirm){
+                          if (isConfirm) {
+                            // jQuery('#dialog').modal('hide');
+                            // window.location.reload();
+                            
+                          } 
+                        });
                     }
                   },
                   'json'
           );
         });
-        jQuery('table').DataTable({
-          language: {
-              "sProcessing": "处理中...",
-              "sLengthMenu": "显示 _MENU_ 项结果",
-              "sZeroRecords": "没有匹配结果",
-              "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-              "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
-              "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-              "sInfoPostFix": "",
-              "sSearch": "搜索:",
-              "sUrl": "",
-              "sEmptyTable": "表中数据为空",
-              "sLoadingRecords": "载入中...",
-              "sInfoThousands": ",",
-              "oPaginate": {
-                  "sFirst": "首页",
-                  "sPrevious": "上页",
-                  "sNext": "下页",
-                  "sLast": "末页"
-              },
-              "oAria": {
-                  "sSortAscending": ": 以升序排列此列",
-                  "sSortDescending": ": 以降序排列此列"
-              }
-          }
-        });
+        
         jQuery('.btn-delete').on('click',function () {
            var that = this,
                    text = jQuery(that).data('text'),
@@ -142,8 +155,34 @@
                     window.location.replace(url);
                 }
             }
-            )
-        })
+            );
+        });
+        jQuery('table').DataTable({
+            language: {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            }
+        });
       })
     </script>
 	{% block js %}{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}{{result['ip']}}执行命令结果返回{% endblock %}
+{% block link %}{% endblock %}
+
+{% block main %}
+
+<table>
+	<tr>
+            <th>执行命令</th>
+            <th>返回结果</th>
+            <th>错误内容</th>
+    </tr>
+    {% for _cmd, _out, _err in result['rt'] %}
+		<td>{{_cmd}}</td>
+		<td>{{_out}}</td>
+		<td>{{_err}}</td>
+
+    {% endfor %}
+</table>
+
+{% endblock %}
+{% block js %}
+
+
+{% endblock %}

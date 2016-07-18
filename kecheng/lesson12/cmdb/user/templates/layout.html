@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <title>{% block title %}{% endblock %}</title>
+      <link href="/static/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet"/>
+      <link href="/static/t1.css" rel="stylesheet">
+      <link href="/static/sweetalert-1.1.1/dist/sweetalert.css" rel="stylesheet"/>
+      <link href="/static/DataTables-1.10.12/media/css/jquery.dataTables.css" rel="stylesheet"/>
+      {% block link %}{% endblock %}
+      <style>
+      	{% block sytle %} {% endblock %}
+      </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">CMDB</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a>欢迎{{session.get('user', {}).get('username', '')}}</a></li>
+            <li><a href="/logout/">退出登录</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="{% block nav_user %}{% endblock %}"><a href="/users/">用户管理</a></li>
+            <li class="{% block nav_log %}{% endblock %}"><a href="/logs/">访问日志分析</a></li>
+            <li class="{% block nav_assets %}{% endblock %}"><a href="/assets/">资产管理</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+         	{% block main %}{% endblock %}
+        </div>
+      </div>
+    </div>
+    {% block dialog %}{% endblock %}
+    <div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="diaglog-title">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="dialog-title"></h4>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" id="dialog-btn"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="interval-dialog" tabindex="-1" role="dialog" aria-labelledby="diaglog-title">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="dialog-title"></h4>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-interval-dialog" data-dismiss="modal">关闭</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="/static/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/sweetalert-1.1.1/dist/sweetalert.min.js"></script>
+    <script type="text/javascript" src="/static/DataTables-1.10.12/media/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/DataTables-1.10.12/media/js/jquery.dataTables.js"></script>
+    {% block script%}{% endblock %}
+    <script type="text/javascript">
+      jQuery(document).ready(function(){
+        jQuery('#dialog').on('show.bs.modal', function(event){
+          var that = this;
+          var button = jQuery(event.relatedTarget);
+          jQuery(that).find('.modal-title').html(button.data('title'));
+          jQuery(that).find('#dialog-btn').html(button.data('btn'));
+          console.log(button.data('url'))
+          jQuery('#dialog').find('.modal-body').load(button.data('url'));
+        });
+
+        var timer_interval = null;
+
+        jQuery('#dialog-btn').on('click', function(){
+          var dialog = jQuery('#dialog');
+          var form = jQuery(dialog).find('form');
+          jQuery.post(form.attr('action'),
+          jQuery(form).serializeArray(),
+                  function(data){
+                    console.log(data)
+                    if (data['is_ok']){
+                      if (data['success']){
+                        //alert(data['sucess']);
+                        //swal(data['success'], "", "success")
+                        var text = data['success']
+                        swal({
+                          title: text,
+                          text: "",
+                          type: "success",
+                          showCancelButton: false,
+                          confirmButtonColor: "#DD6B55",
+                          confirmButtonText: "确定",
+                          cancelButtonText: "",
+                          closeOnConfirm: true,
+                          closeOnCancel: false
+                        },
+                        function(isConfirm){
+                          if (isConfirm) {
+                            jQuery('#dialog').modal('hide');
+                            window.location.reload();
+                            
+                          } 
+                        });
+                      }
+                      // jQuery('#dialog').modal('hide');
+                      // window.location.reload();
+                    }else{
+                      //alert(data['error']);
+                      var text = data['error']
+                      swal({
+                          title: text,
+                          text: "",
+                          type: "error",
+                          showCancelButton: false,
+                          confirmButtonColor: "#DD6B55",
+                          confirmButtonText: "确定",
+                          cancelButtonText: "",
+                          closeOnConfirm: true,
+                          closeOnCancel: false
+                        },
+                        function(isConfirm){
+                          if (isConfirm) {
+                            // jQuery('#dialog').modal('hide');
+                            // window.location.reload();
+                            
+                          } 
+                        });
+                    }
+                  },
+                  'json'
+          );
+        });
+        
+        jQuery('.btn-delete').on('click',function () {
+           var that = this,
+                   text = jQuery(that).data('text'),
+                   url = jQuery(that).data('url');
+            swal({
+               title: "确定删除用户" + text,
+                  text: "",
+                  type: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#DD6B55",
+                  confirmButtonText: "确定",
+                  cancelButtonText: "关闭",
+                  closeOnConfirm: true,
+                  closeOnCancel: true
+            },
+            function(isConfirm) {
+                if (isConfirm){
+                    window.location.replace(url);
+                }
+            }
+            );
+        });
+        jQuery('#interval-dialog').on('show.bs.modal', function(event){
+          var that = this;
+          var button = jQuery(event.relatedTarget);
+          jQuery(that).find('.modal-title').html(button.data('title'));
+          jQuery(that).find('#dialog-btn').html(button.data('btn'));
+          console.log(button.data('url'))
+          jQuery('#interval-dialog').find('.modal-body').load(button.data('url'));
+          timer_interval = setInterval(function(){
+            jQuery('#interval-dialog').find('.modal-body').load(button.data('url'));
+          }, 60 * 1000)
+        });
+
+        jQuery('.btn-interval-dialog').on('click', function(){
+          clearInterval(timer_interval)
+          jQuery('.btn-interval-dialog').modal('hide');
+        });
+
+        jQuery('table').DataTable({
+            language: {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            }
+        });
+      })
+    </script>
+	{% block js %}{% endblock %}
+  </body>
+  </html>

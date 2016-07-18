@@ -168,7 +168,7 @@
 
             class Dog(Animal):
                 def __init__(self, name, age, variety):
-                    super(Dog, self).__init__(name, age)  //这里调用谁的你类,类名写谁
+                    super(Dog, self).__init__(name, age)  //这里调用谁的父类,类名写谁
                     self.variety = variety
 
                 def run(self):
