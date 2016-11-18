@@ -8,10 +8,10 @@ from email import encoders
 
 
 def send_mail(to_list):
-	mailHost = 'smtp.homelink.com.cn'
-	mailUser = 'zhaoyh_v'
-	mailPass = 'Zyh@1001'
-	mailDomain = 'homelink.com.cn'
+	mailHost = 'smtp.aa.com.cn'
+	mailUser = 'aaaa'
+	mailPass = 'bbbbbbb'
+	mailDomain = 'aa.com.cn'
 	me = mailUser + '<' + mailUser+'@'+mailDomain+'>'
 
 	#发送不带附件的邮件
@@ -22,13 +22,13 @@ def send_mail(to_list):
 
 	#发送带附件邮件
 	msg = MIMEMultipart()
-	msg['Subject'] = '理财新VPN帐号信息'
+	msg['Subject'] = '新VPN帐号信息'
 	msg['To'] = to_list[1]
 	msg['From'] = me
-	msg.attach(MIMEText(u'HI %s:\n\t由于链家网梳理VPN权限，将不再对分公司提供远程VPN服务，故对VPN设备进行切换，请大家使用新的VPN帐号和密码进行登陆，使用说明见附件，谢谢！\n\t您的新VPN帐号是：%s\n\t您的VPN密码是：%s\n'%(to_list[0],to_list[2],to_list[3]),'plain','utf-8'))
-	with open('数北vpn使用说明.docx','rb') as f:
-		mime = MIMEBase('application','octet-stream',filename='数北vpn使用说明.docx')
-		mime.add_header('Content-Disposition', 'attachment', filename='数北vpn使用说明.docx')
+	msg.attach(MIMEText(u'HI %s:\n\t由于您的新VPN帐号是：%s\n\t您的VPN密码是：%s\n'%(to_list[0],to_list[2],to_list[3]),'plain','utf-8'))
+	with open('vpn使用说明.docx','rb') as f:
+		mime = MIMEBase('application','octet-stream',filename='vpn使用说明.docx')
+		mime.add_header('Content-Disposition', 'attachment', filename='vpn使用说明.docx')
 		mime.add_header('Content-ID', '<0>')
 		mime.add_header('X-Attachment-ID', '<0>')
 		mime.set_payload(f.read())
